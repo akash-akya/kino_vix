@@ -1,0 +1,50 @@
+# Kino Vix Demo
+
+## Section
+
+```elixir
+alias Vix.Vips.Image
+alias Vix.Vips.Operation
+
+defmodule Helper do
+  def download(url) do
+    {:ok, {_, _, body}} = :httpc.request(:get, {url, []}, [], [])
+    IO.iodata_to_binary(body)
+  end
+end
+
+{:ok, starry_night} =
+  Helper.download(
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/757px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg"
+  )
+  |> Image.new_from_buffer()
+
+{:ok, sunflower} =
+  Helper.download(
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Vincent_van_Gogh_-_Sunflowers_-_VGM_F458.jpg/457px-Vincent_van_Gogh_-_Sunflowers_-_VGM_F458.jpg"
+  )
+  |> Image.new_from_buffer()
+```
+
+<!-- livebook:{"attrs":{"operation_name":"text","optional_input":[{"desc":"Load this font file","flags":["vips_argument_input","vips_argument_construct"],"param_name":"fontfile","priority":12,"spec_type":"GParamString","value":"","value_type":"gchararray"},{"default":0,"desc":"Line spacing","flags":["vips_argument_input","vips_argument_construct"],"max":1000000,"min":0,"param_name":"spacing","priority":11,"spec_type":"GParamInt","value":"","value_type":"gint"},{"default":false,"desc":"Justify lines","flags":["vips_argument_input","vips_argument_construct"],"param_name":"justify","priority":9,"spec_type":"GParamBoolean","value":"","value_type":"gboolean"},{"default":72,"desc":"DPI to render at","flags":["vips_argument_input","vips_argument_construct"],"max":1000000,"min":1,"param_name":"dpi","priority":9,"spec_type":"GParamInt","value":"400","value_type":"gint"},{"default":false,"desc":"Enable RGBA output","flags":["vips_argument_input","vips_argument_construct"],"param_name":"rgba","priority":9,"spec_type":"GParamBoolean","value":"true","value_type":"gboolean"},{"default":"VIPS_ALIGN_LOW","desc":"Align on the low, centre or high edge","enum_options":[{"label":"VIPS_ALIGN_HIGH","value":"VIPS_ALIGN_HIGH"},{"label":"VIPS_ALIGN_CENTRE","value":"VIPS_ALIGN_CENTRE"},{"label":"VIPS_ALIGN_LOW","value":"VIPS_ALIGN_LOW"}],"flags":["vips_argument_input","vips_argument_construct"],"param_name":"align","priority":8,"spec_type":"GParamEnum","value":"VIPS_ALIGN_HIGH","value_type":"VipsAlign"},{"default":0,"desc":"Maximum image height in pixels","flags":["vips_argument_input","vips_argument_construct"],"max":10000000,"min":0,"param_name":"height","priority":7,"spec_type":"GParamInt","value":"","value_type":"gint"},{"default":0,"desc":"Maximum image width in pixels","flags":["vips_argument_input","vips_argument_construct"],"max":10000000,"min":0,"param_name":"width","priority":6,"spec_type":"GParamInt","value":"","value_type":"gint"},{"desc":"Font to render with","flags":["vips_argument_input","vips_argument_construct"],"param_name":"font","priority":5,"spec_type":"GParamString","value":"","value_type":"gchararray"}],"optional_output":[{"default":72,"desc":"DPI selected by autofit","flags":["vips_argument_output","vips_argument_construct"],"max":1000000,"min":1,"param_name":"autofit-dpi","priority":10,"spec_type":"GParamInt","value":"","value_type":"gint"}],"required_input":[{"desc":"Text to render","flags":["vips_argument_input","vips_argument_construct","vips_argument_required"],"param_name":"text","priority":4,"spec_type":"GParamString","value":"<span color=\"white\"><b>SUNFLOWER</b></span>","value_type":"gchararray"}],"required_output":[{"desc":"Output image","flags":["vips_argument_output","vips_argument_construct","vips_argument_required"],"param_name":"out","priority":1,"spec_type":"GParamObject","value":"","value_type":"VipsImage"}],"variable":"text"},"kind":"Elixir.KinoVix.OperationCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{text, _flags} =
+  Vix.Vips.Operation.text!("<span color=\"white\"><b>SUNFLOWER</b></span>",
+    dpi: 400,
+    rgba: true,
+    align: :VIPS_ALIGN_HIGH
+  )
+
+text
+```
+
+```elixir
+Kino.Layout.grid([starry_night, sunflower], columns: 1)
+```
+
+<!-- livebook:{"attrs":{"operation_name":"composite2","optional_input":[{"default":false,"desc":"Images have premultiplied alpha","flags":["vips_argument_input","vips_argument_construct"],"param_name":"premultiplied","priority":11,"spec_type":"GParamBoolean","value":"","value_type":"gboolean"},{"default":"VIPS_INTERPRETATION_sRGB","desc":"Composite images in this colour space","enum_options":[{"label":"VIPS_INTERPRETATION_HSV","value":"VIPS_INTERPRETATION_HSV"},{"label":"VIPS_INTERPRETATION_scRGB","value":"VIPS_INTERPRETATION_scRGB"},{"label":"VIPS_INTERPRETATION_MATRIX","value":"VIPS_INTERPRETATION_MATRIX"},{"label":"VIPS_INTERPRETATION_GREY16","value":"VIPS_INTERPRETATION_GREY16"},{"label":"VIPS_INTERPRETATION_RGB16","value":"VIPS_INTERPRETATION_RGB16"},{"label":"VIPS_INTERPRETATION_FOURIER","value":"VIPS_INTERPRETATION_FOURIER"},{"label":"VIPS_INTERPRETATION_YXY","value":"VIPS_INTERPRETATION_YXY"},{"label":"VIPS_INTERPRETATION_sRGB","value":"VIPS_INTERPRETATION_sRGB"},{"label":"VIPS_INTERPRETATION_LABS","value":"VIPS_INTERPRETATION_LABS"},{"label":"VIPS_INTERPRETATION_LCH","value":"VIPS_INTERPRETATION_LCH"},{"label":"VIPS_INTERPRETATION_CMC","value":"VIPS_INTERPRETATION_CMC"},{"label":"VIPS_INTERPRETATION_RGB","value":"VIPS_INTERPRETATION_RGB"},{"label":"VIPS_INTERPRETATION_LABQ","value":"VIPS_INTERPRETATION_LABQ"},{"label":"VIPS_INTERPRETATION_CMYK","value":"VIPS_INTERPRETATION_CMYK"},{"label":"VIPS_INTERPRETATION_LAB","value":"VIPS_INTERPRETATION_LAB"},{"label":"VIPS_INTERPRETATION_XYZ","value":"VIPS_INTERPRETATION_XYZ"},{"label":"VIPS_INTERPRETATION_HISTOGRAM","value":"VIPS_INTERPRETATION_HISTOGRAM"},{"label":"VIPS_INTERPRETATION_B_W","value":"VIPS_INTERPRETATION_B_W"},{"label":"VIPS_INTERPRETATION_MULTIBAND","value":"VIPS_INTERPRETATION_MULTIBAND"},{"label":"VIPS_INTERPRETATION_ERROR","value":"VIPS_INTERPRETATION_ERROR"}],"flags":["vips_argument_input","vips_argument_construct"],"param_name":"compositing-space","priority":10,"spec_type":"GParamEnum","value":"","value_type":"VipsInterpretation"},{"default":0,"desc":"y position of overlay","flags":["vips_argument_input","vips_argument_construct"],"max":10000000,"min":-10000000,"param_name":"y","priority":5,"spec_type":"GParamInt","value":"","value_type":"gint"},{"default":0,"desc":"x position of overlay","flags":["vips_argument_input","vips_argument_construct"],"max":10000000,"min":-10000000,"param_name":"x","priority":4,"spec_type":"GParamInt","value":"","value_type":"gint"}],"optional_output":[],"required_input":[{"desc":"Base image","flags":["vips_argument_input","vips_argument_construct","vips_argument_required"],"param_name":"base","priority":0,"spec_type":"GParamObject","value":"text","value_type":"VipsImage"},{"desc":"Overlay image","flags":["vips_argument_input","vips_argument_construct","vips_argument_required"],"param_name":"overlay","priority":1,"spec_type":"GParamObject","value":"starry_night","value_type":"VipsImage"},{"default":"VIPS_BLEND_MODE_OVER","desc":"VipsBlendMode to join with","enum_options":[{"label":"VIPS_BLEND_MODE_EXCLUSION","value":"VIPS_BLEND_MODE_EXCLUSION"},{"label":"VIPS_BLEND_MODE_DIFFERENCE","value":"VIPS_BLEND_MODE_DIFFERENCE"},{"label":"VIPS_BLEND_MODE_SOFT_LIGHT","value":"VIPS_BLEND_MODE_SOFT_LIGHT"},{"label":"VIPS_BLEND_MODE_HARD_LIGHT","value":"VIPS_BLEND_MODE_HARD_LIGHT"},{"label":"VIPS_BLEND_MODE_COLOUR_BURN","value":"VIPS_BLEND_MODE_COLOUR_BURN"},{"label":"VIPS_BLEND_MODE_COLOUR_DODGE","value":"VIPS_BLEND_MODE_COLOUR_DODGE"},{"label":"VIPS_BLEND_MODE_LIGHTEN","value":"VIPS_BLEND_MODE_LIGHTEN"},{"label":"VIPS_BLEND_MODE_DARKEN","value":"VIPS_BLEND_MODE_DARKEN"},{"label":"VIPS_BLEND_MODE_OVERLAY","value":"VIPS_BLEND_MODE_OVERLAY"},{"label":"VIPS_BLEND_MODE_SCREEN","value":"VIPS_BLEND_MODE_SCREEN"},{"label":"VIPS_BLEND_MODE_MULTIPLY","value":"VIPS_BLEND_MODE_MULTIPLY"},{"label":"VIPS_BLEND_MODE_SATURATE","value":"VIPS_BLEND_MODE_SATURATE"},{"label":"VIPS_BLEND_MODE_ADD","value":"VIPS_BLEND_MODE_ADD"},{"label":"VIPS_BLEND_MODE_XOR","value":"VIPS_BLEND_MODE_XOR"},{"label":"VIPS_BLEND_MODE_DEST_ATOP","value":"VIPS_BLEND_MODE_DEST_ATOP"},{"label":"VIPS_BLEND_MODE_DEST_OUT","value":"VIPS_BLEND_MODE_DEST_OUT"},{"label":"VIPS_BLEND_MODE_DEST_IN","value":"VIPS_BLEND_MODE_DEST_IN"},{"label":"VIPS_BLEND_MODE_DEST_OVER","value":"VIPS_BLEND_MODE_DEST_OVER"},{"label":"VIPS_BLEND_MODE_DEST","value":"VIPS_BLEND_MODE_DEST"},{"label":"VIPS_BLEND_MODE_ATOP","value":"VIPS_BLEND_MODE_ATOP"},{"label":"VIPS_BLEND_MODE_OUT","value":"VIPS_BLEND_MODE_OUT"},{"label":"VIPS_BLEND_MODE_IN","value":"VIPS_BLEND_MODE_IN"},{"label":"VIPS_BLEND_MODE_OVER","value":"VIPS_BLEND_MODE_OVER"},{"label":"VIPS_BLEND_MODE_SOURCE","value":"VIPS_BLEND_MODE_SOURCE"},{"label":"VIPS_BLEND_MODE_CLEAR","value":"VIPS_BLEND_MODE_CLEAR"}],"flags":["vips_argument_input","vips_argument_construct","vips_argument_required"],"param_name":"mode","priority":3,"spec_type":"GParamEnum","value":"VIPS_BLEND_MODE_ATOP","value_type":"VipsBlendMode"}],"required_output":[{"desc":"Output image","flags":["vips_argument_output","vips_argument_construct","vips_argument_required"],"param_name":"out","priority":2,"spec_type":"GParamObject","value":"","value_type":"VipsImage"}],"variable":"composite"},"kind":"Elixir.KinoVix.OperationCell","livebook_object":"smart_cell"} -->
+
+```elixir
+composite = Vix.Vips.Operation.composite2!(text, starry_night, :VIPS_BLEND_MODE_ATOP)
+```
